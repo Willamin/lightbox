@@ -1,5 +1,5 @@
 #!/usr/local/bin/python
-import sys, tty, termios
+import sys, tty, termios, getopt
 
 class LightBox: 
 	lights = [ 
@@ -32,12 +32,17 @@ def loop(box):
 	elif c == 'l':
 		print list(box)
 	elif isInt(c):
-		i = int(c)
-		if 1 <= i < len(box.lights):
-			print 'toggling light', i, "\n  ", box.lights[i], '=>', not box.lights[i]
-			box.lights[i] = not box.lights[i]
-
+		toggleLight(box, c)
+		if not dryrun:
+			print "NOT A DRILL"
 	return True
+
+def toggleLight(box, c):
+	i = int(c)
+	if 1 <= i < len(box.lights):
+		print 'toggling light', i, "\n  ", box.lights[i], '=>', not box.lights[i]
+		box.lights[i] = not box.lights[i]
+
 
 def help():
 	return ("\nLightbox\n"
@@ -69,7 +74,14 @@ def find(element,list_element):
     except ValueError:
         return -1
 		
+
 print 'Hi'
+dryrun = False
+for arg in sys.argv:
+	if arg == '-d':
+		dryrun = True
+
+
 looping = True
 box = LightBox()
 while looping:
