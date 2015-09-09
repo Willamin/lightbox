@@ -1,5 +1,6 @@
 #!/usr/local/bin/python
-import sys, tty, termios, getopt
+import sys, tty, termios
+
 
 class LightBox: 
 	lights = [ 
@@ -8,7 +9,26 @@ class LightBox:
 		True, True,
 		True, True
 	]
-	
+	pins = [
+		-1,
+		4, 17,
+		22, 23,
+		24, 25
+	]
+
+def setupPins(box):
+	if dryrun:
+		return
+	for i in len(box.pins):
+		GPIO.setup(box.pins[i], GPIO.OUT)
+
+
+def refresh (box):
+	if dryrun:
+		return
+	print "Refreshing lights"
+	for i in range(1,len(box.lights)):
+		GPIO.output(box.pins[i],box.lights[i])
 
 def list(box):
 	r = ''
@@ -34,7 +54,7 @@ def loop(box):
 	elif isInt(c):
 		toggleLight(box, c)
 		if not dryrun:
-			print "NOT A DRILL"
+			refresh(box)
 	return True
 
 def toggleLight(box, c):
@@ -81,9 +101,14 @@ for arg in sys.argv:
 	if arg == '-d':
 		dryrun = True
 
+if not dryrun:
+	import RPi.GPIO as GPIO
+
 
 looping = True
 box = LightBox()
+setupPins(box)
+refresh(box)
 while looping:
 	looping = loop(box)
 print 'Bye'
