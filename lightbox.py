@@ -19,7 +19,7 @@ class LightBox:
 def setupPins(box):
 	if dryrun:
 		return
-	for i in len(box.pins):
+	for i in range(1,len(box.pins)):
 		GPIO.setup(box.pins[i], GPIO.OUT)
 
 
