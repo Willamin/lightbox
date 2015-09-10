@@ -27,7 +27,8 @@ def setupPins(box):
 def refresh (box):
 	if dryrun:
 		return
-	print "Refreshing lights"
+	if verbose: 
+		print "Refreshing lights"
 	for i in range(1,len(box.lights)):
 		GPIO.output(box.pins[i],box.lights[i])
 
@@ -61,7 +62,8 @@ def loop(box):
 def toggleLight(box, c):
 	i = int(c)
 	if 1 <= i < len(box.lights):
-		print 'toggling light', i, "\n  ", box.lights[i], '=>', not box.lights[i]
+		if verbose: 
+			print 'toggling light', i, "\n  ", box.lights[i], '=>', not box.lights[i]
 		box.lights[i] = not box.lights[i]
 
 
@@ -95,21 +97,25 @@ def find(element,list_element):
     except ValueError:
         return -1
 		
-
-print 'Hi'
+print 'Running LightBox'
 dryrun = False
+verbose = False
 for arg in sys.argv:
 	if arg == '-d':
 		dryrun = True
+	if arg == '-v':
+		verbose = True
 
 if not dryrun:
 	import RPi.GPIO as GPIO
 
-
+if verbose: 
+	print 'Hi'
 looping = True
 box = LightBox()
 setupPins(box)
 refresh(box)
 while looping:
 	looping = loop(box)
-print 'Bye'
+if verbose: 
+	print 'Bye'
