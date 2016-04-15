@@ -1,5 +1,5 @@
 #!/usr/local/bin/python
-import sys, tty, termios
+import sys, tty, termios, time
 
 
 class LightBox: 
