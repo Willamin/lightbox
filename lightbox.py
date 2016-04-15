@@ -115,6 +115,9 @@ looping = True
 box = LightBox()
 setupPins(box)
 refresh(box)
+toggleLight(box, 6)
+time.sleep(1)
+toggleLight(box, 6)
 while looping:
 	looping = loop(box)
 if verbose: 
